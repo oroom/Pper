@@ -7,7 +7,6 @@ Pod::Spec.new do |s|
   s.author           = { 'Dzmitry Navak' => 'navakdzmitry@gmail.com' }
   s.source           = { :git => 'https://github.com/oroom/Pper.git', :tag => s.version.to_s }
   s.ios.deployment_target = '9.0'
-  s.swift_version    = '4.0'
   s.source_files = 'code/sources/core/**/*', 'code/sources/permissions/**/*'
   s.exclude_files = 'Example/*'
 
@@ -22,7 +21,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'camera' do |ss|
-    ss.dependency 'arek/Core'
+    ss.dependency 'pper/core'
     ss.source_files = 'code/sources/permissions/camera.swift'
     ss.frameworks = 'AVFoundation'
   end
