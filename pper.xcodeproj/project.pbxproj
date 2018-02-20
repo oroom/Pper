@@ -11,8 +11,13 @@
 		DC484127203C159700C7F7A6 /* pperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484126203C159700C7F7A6 /* pperTests.swift */; };
 		DC484138203C166E00C7F7A6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DC484136203C166E00C7F7A6 /* Info.plist */; };
 		DC484139203C166E00C7F7A6 /* pper.h in Headers */ = {isa = PBXBuildFile; fileRef = DC484137203C166E00C7F7A6 /* pper.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DC48413B203C168700C7F7A6 /* location.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC48413A203C168700C7F7A6 /* location.swift */; };
-		DC48413D203C169400C7F7A6 /* camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC48413C203C169400C7F7A6 /* camera.swift */; };
+		DC48413B203C168700C7F7A6 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC48413A203C168700C7F7A6 /* Location.swift */; };
+		DC48413D203C169400C7F7A6 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC48413C203C169400C7F7A6 /* Camera.swift */; };
+		DC484143203C1BBB00C7F7A6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC48413E203C1BBB00C7F7A6 /* Extensions.swift */; };
+		DC484144203C1BBB00C7F7A6 /* PermissionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC48413F203C1BBB00C7F7A6 /* PermissionConstants.swift */; };
+		DC484145203C1BBB00C7F7A6 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484140203C1BBB00C7F7A6 /* Structs.swift */; };
+		DC484146203C1BBB00C7F7A6 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484141203C1BBB00C7F7A6 /* Permissions.swift */; };
+		DC484147203C1BBB00C7F7A6 /* PermissionScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484142203C1BBB00C7F7A6 /* PermissionScope.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,8 +37,13 @@
 		DC484128203C159700C7F7A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC484136203C166E00C7F7A6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC484137203C166E00C7F7A6 /* pper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pper.h; sourceTree = "<group>"; };
-		DC48413A203C168700C7F7A6 /* location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = location.swift; sourceTree = "<group>"; };
-		DC48413C203C169400C7F7A6 /* camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = camera.swift; sourceTree = "<group>"; };
+		DC48413A203C168700C7F7A6 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		DC48413C203C169400C7F7A6 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		DC48413E203C1BBB00C7F7A6 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		DC48413F203C1BBB00C7F7A6 /* PermissionConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionConstants.swift; sourceTree = "<group>"; };
+		DC484140203C1BBB00C7F7A6 /* Structs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
+		DC484141203C1BBB00C7F7A6 /* Permissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
+		DC484142203C1BBB00C7F7A6 /* PermissionScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionScope.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +105,11 @@
 		DC484133203C166E00C7F7A6 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				DC48413E203C1BBB00C7F7A6 /* Extensions.swift */,
+				DC48413F203C1BBB00C7F7A6 /* PermissionConstants.swift */,
+				DC484141203C1BBB00C7F7A6 /* Permissions.swift */,
+				DC484142203C1BBB00C7F7A6 /* PermissionScope.swift */,
+				DC484140203C1BBB00C7F7A6 /* Structs.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -102,8 +117,8 @@
 		DC484134203C166E00C7F7A6 /* permissions */ = {
 			isa = PBXGroup;
 			children = (
-				DC48413A203C168700C7F7A6 /* location.swift */,
-				DC48413C203C169400C7F7A6 /* camera.swift */,
+				DC48413A203C168700C7F7A6 /* Location.swift */,
+				DC48413C203C169400C7F7A6 /* Camera.swift */,
 			);
 			path = permissions;
 			sourceTree = "<group>";
@@ -229,8 +244,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC48413D203C169400C7F7A6 /* camera.swift in Sources */,
-				DC48413B203C168700C7F7A6 /* location.swift in Sources */,
+				DC484147203C1BBB00C7F7A6 /* PermissionScope.swift in Sources */,
+				DC48413D203C169400C7F7A6 /* Camera.swift in Sources */,
+				DC484143203C1BBB00C7F7A6 /* Extensions.swift in Sources */,
+				DC484145203C1BBB00C7F7A6 /* Structs.swift in Sources */,
+				DC484144203C1BBB00C7F7A6 /* PermissionConstants.swift in Sources */,
+				DC484146203C1BBB00C7F7A6 /* Permissions.swift in Sources */,
+				DC48413B203C168700C7F7A6 /* Location.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
