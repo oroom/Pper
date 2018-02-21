@@ -33,7 +33,7 @@ public enum PermissionType: Int, CustomStringConvertible {
 }
 
 /// Possible statuses for a permission.
-@objc public enum PermissionStatus: Int, CustomStringConvertible {
+public enum PermissionStatus: Int, CustomStringConvertible {
     case authorized, unauthorized, unknown, disabled
     
     public var description: String {

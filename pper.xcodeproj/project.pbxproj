@@ -19,6 +19,7 @@
 		DC484146203C1BBB00C7F7A6 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484141203C1BBB00C7F7A6 /* Permissions.swift */; };
 		DC484147203C1BBB00C7F7A6 /* PermissionScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484142203C1BBB00C7F7A6 /* PermissionScope.swift */; };
 		DC484149203C1E9300C7F7A6 /* PperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484148203C1E9300C7F7A6 /* PperProtocol.swift */; };
+		DC484155203D79A400C7F7A6 /* UIItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484154203D79A400C7F7A6 /* UIItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		DC484141203C1BBB00C7F7A6 /* Permissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
 		DC484142203C1BBB00C7F7A6 /* PermissionScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionScope.swift; sourceTree = "<group>"; };
 		DC484148203C1E9300C7F7A6 /* PperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PperProtocol.swift; sourceTree = "<group>"; };
+		DC484154203D79A400C7F7A6 /* UIItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				DC484142203C1BBB00C7F7A6 /* PermissionScope.swift */,
 				DC484140203C1BBB00C7F7A6 /* Structs.swift */,
 				DC484148203C1E9300C7F7A6 /* PperProtocol.swift */,
+				DC484154203D79A400C7F7A6 /* UIItem.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC484147203C1BBB00C7F7A6 /* PermissionScope.swift in Sources */,
+				DC484155203D79A400C7F7A6 /* UIItem.swift in Sources */,
 				DC48413D203C169400C7F7A6 /* Camera.swift in Sources */,
 				DC484143203C1BBB00C7F7A6 /* Extensions.swift in Sources */,
 				DC484145203C1BBB00C7F7A6 /* Structs.swift in Sources */,

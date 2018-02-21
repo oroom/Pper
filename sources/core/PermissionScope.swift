@@ -46,10 +46,6 @@ public protocol ButtonBuilder {
     public var closeButton                  = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 32))
     /// Offset used to position the Close button.
     public var closeOffset                  = CGSize.zero
-    /// Color used for permission buttons with authorized status
-    public var authorizedButtonColor        = UIColor(red: 0, green: 0.47, blue: 1, alpha: 1)
-    /// Color used for permission buttons with unauthorized status. By default, inverse of `authorizedButtonColor`.
-    public var unauthorizedButtonColor:UIColor?
     /// Messages for the body label of the dialog presented when requesting access.
     lazy var permissionMessages: [PermissionType : String] = [PermissionType : String]()
     
@@ -272,10 +268,10 @@ public protocol ButtonBuilder {
                                 completion: { currentStatus in
                                     let prettyDescription = type.prettyDescription
                                     if currentStatus == .authorized {
-                                        self.setButtonAuthorizedStyle(button)
+                                        button.setStatus(.authorized)
                                         button.setTitle("Allowed \(prettyDescription)".localized.uppercased(), for: .normal)
                                     } else if currentStatus == .unauthorized {
-                                        self.setButtonUnauthorizedStyle(button)
+                                        button.setStatus(.unauthorized)
                                         button.setTitle("Denied \(prettyDescription)".localized.uppercased(), for: .normal)
                                     } else if currentStatus == .disabled {
                                         //                setButtonDisabledStyle(button)
@@ -348,28 +344,6 @@ public protocol ButtonBuilder {
         button.addTarget(self, action: Selector("request\(type)"), for: .touchUpInside)
         
         button.accessibilityIdentifier = "permissionscope.button.\(type)".lowercased()
-    }
-
-    /**
-    Sets the style for permission buttons with authorized status.
-    
-    - parameter button: Permission button
-    */
-    func setButtonAuthorizedStyle(_ button: UIButton) {
-        button.layer.borderWidth = 0
-        button.backgroundColor = authorizedButtonColor
-        button.setTitleColor(.white, for: .normal)
-    }
-    
-    /**
-    Sets the style for permission buttons with unauthorized status.
-    
-    - parameter button: Permission button
-    */
-    func setButtonUnauthorizedStyle(_ button: UIButton) {
-        button.layer.borderWidth = 0
-        button.backgroundColor = unauthorizedButtonColor ?? authorizedButtonColor.inverseColor
-        button.setTitleColor(.white, for: .normal)
     }
 
     /**
