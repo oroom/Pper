@@ -14,6 +14,10 @@ public typealias authClosureType      = (_ finished: Bool, _ results: [Permissio
 public typealias cancelClosureType    = (_ results: [PermissionResult]) -> Void
 typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
 
+public protocol ButtonBuilder {
+    func build() -> UIButton
+}
+
 @objc public class PermissionScope: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate, CBPeripheralManagerDelegate {
 
     // MARK: UI Parameters
@@ -79,7 +83,7 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     // MARK: - Internal state and resolution
     
     /// Permissions configured using `addPermission(:)`
-    var configuredPermissions: [Permission] = []
+    public var configuredPermissions: [Permission] = []
     var permissionButtons: [UIButton]       = []
     var permissionLabels: [UILabel]         = []
 	
@@ -251,35 +255,40 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         }
         closeButton.setTitleColor(closeButtonTextColor, for: .normal)
 
-        let baseOffset = 95
+        layoutContentView(contentView, isPopupLayout: true)
+    }
+    
+    func layoutContentView(_ contentView: UIView, isPopupLayout: Bool) {
+        let verticalOffset: CGFloat = isPopupLayout ? 160.0 : 16.0
+        let baseOffset: CGFloat = isPopupLayout ? 95.0 : 16.0
         var index = 0
         for button in permissionButtons {
-            button.center = contentView.center
-            button.frame.offsetInPlace(dx: -contentView.frame.origin.x, dy: -contentView.frame.origin.y)
-            button.frame.offsetInPlace(dx: 0, dy: -((dialogHeight/2)-160) + CGFloat(index * baseOffset))
+            button.frame.origin.x = (contentView.bounds.width - button.bounds.width) / 2
+            button.frame.origin.y = verticalOffset + CGFloat(index) * (button.frame.height + baseOffset)
             
             let type = configuredPermissions[index].type
             
             statusForPermission(type,
-                completion: { currentStatus in
-                    let prettyDescription = type.prettyDescription
-                    if currentStatus == .authorized {
-                        self.setButtonAuthorizedStyle(button)
-                        button.setTitle("Allowed \(prettyDescription)".localized.uppercased(), for: .normal)
-                    } else if currentStatus == .unauthorized {
-                        self.setButtonUnauthorizedStyle(button)
-                        button.setTitle("Denied \(prettyDescription)".localized.uppercased(), for: .normal)
-                    } else if currentStatus == .disabled {
-                        //                setButtonDisabledStyle(button)
-                        button.setTitle("\(prettyDescription) Disabled".localized.uppercased(), for: .normal)
-                    }
-                    
-                    let label = self.permissionLabels[index]
-                    label.center = self.contentView.center
-                    label.frame.offsetInPlace(dx: -self.contentView.frame.origin.x, dy: -self.contentView.frame.origin.y)
-                    label.frame.offsetInPlace(dx: 0, dy: -((dialogHeight/2)-205) + CGFloat(index * baseOffset))
-                    
-                    index = index + 1
+                                completion: { currentStatus in
+                                    let prettyDescription = type.prettyDescription
+                                    if currentStatus == .authorized {
+                                        self.setButtonAuthorizedStyle(button)
+                                        button.setTitle("Allowed \(prettyDescription)".localized.uppercased(), for: .normal)
+                                    } else if currentStatus == .unauthorized {
+                                        self.setButtonUnauthorizedStyle(button)
+                                        button.setTitle("Denied \(prettyDescription)".localized.uppercased(), for: .normal)
+                                    } else if currentStatus == .disabled {
+                                        //                setButtonDisabledStyle(button)
+                                        button.setTitle("\(prettyDescription) Disabled".localized.uppercased(), for: .normal)
+                                    }
+                                    
+                                    if index < self.permissionLabels.count {
+                                        let label = self.permissionLabels[index]
+                                        label.center = self.contentView.center
+                                        label.frame.offsetInPlace(dx: -self.contentView.frame.origin.x, dy: -self.contentView.frame.origin.y)
+                                        label.frame.offsetInPlace(dx: 0, dy: -((contentView.frame.height/2)-205) + CGFloat(index) * baseOffset)
+                                    }
+                                    index = index + 1
             })
         }
     }
@@ -292,13 +301,14 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     - parameter config: Configuration for a specific permission.
     - parameter message: Body label's text on the presented dialog when requesting access.
     */
-    @objc public func addPermission(_ permission: Permission, message: String) {
+    public func addPermission(_ permission: Permission, message: String) {
         assert(!message.isEmpty, "Including a message about your permission usage is helpful")
         assert(configuredPermissions.count < 3, "Ask for three or fewer permissions at a time")
-        assert(configuredPermissions.first { $0.type == permission.type }.isNil, "Permission for \(permission.type) already set")
         
-        configuredPermissions.append(permission)
-        permissionMessages[permission.type] = message
+        if !configuredPermissions.contains { $0.type == permission.type } {
+            configuredPermissions.append(permission)
+            permissionMessages[permission.type] = message
+        }
         
         if permission.type == .bluetooth && askedBluetooth {
             triggerBluetoothStatusUpdate()
@@ -322,7 +332,11 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         button.layer.borderWidth = permissionButtonBorderWidth
         button.layer.borderColor = permissionButtonBorderColor.cgColor
         button.layer.cornerRadius = permissionButtonCornerRadius
-
+        
+        return button
+    }
+    
+    private func setButtonText(_ button: UIButton, type: PermissionType) {
         // this is a bit of a mess, eh?
         switch type {
         case .locationAlways, .locationInUse:
@@ -332,10 +346,8 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         }
         
         button.addTarget(self, action: Selector("request\(type)"), for: .touchUpInside)
-
-        button.accessibilityIdentifier = "permissionscope.button.\(type)".lowercased()
         
-        return button
+        button.accessibilityIdentifier = "permissionscope.button.\(type)".lowercased()
     }
 
     /**
@@ -461,6 +473,10 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         case .notDetermined:
             return .unknown
         }
+    }
+    
+    deinit {
+        print("Permission Scope deinitialized")
     }
 
     /**
@@ -629,30 +645,30 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     /**
     Requests access to User Notifications, if necessary.
     */
-    @objc public func requestNotifications() {
-        let status = statusNotifications()
-        switch status {
-        case .unknown:
-            let notificationsPermission = self.configuredPermissions
-                .first { $0 is NotificationsPermission } as? NotificationsPermission
-            let notificationsPermissionSet = notificationsPermission?.notificationCategories
-
-            NotificationCenter.default.addObserver(self, selector: #selector(showingNotificationPermission), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-            
-            notificationTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(finishedShowingNotificationPermission), userInfo: nil, repeats: false)
-            
-            UIApplication.shared.registerUserNotificationSettings(
-                UNNotificationSettings(types: [.alert, .sound, .badge],
-                categories: notificationsPermissionSet)
-            )
-        case .unauthorized:
-            showDeniedAlert(.notifications)
-        case .disabled:
-            showDisabledAlert(.notifications)
-        case .authorized:
-            detectAndCallback()
-        }
-    }
+//    @objc public func requestNotifications() {
+//        let status = statusNotifications()
+//        switch status {
+//        case .unknown:
+//            let notificationsPermission = self.configuredPermissions
+//                .first { $0 is NotificationsPermission } as? NotificationsPermission
+//            let notificationsPermissionSet = notificationsPermission?.notificationCategories
+//
+//            NotificationCenter.default.addObserver(self, selector: #selector(showingNotificationPermission), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+//            
+//            notificationTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(finishedShowingNotificationPermission), userInfo: nil, repeats: false)
+//            
+//            UIApplication.shared.registerUserNotificationSettings(
+//                UNNotificationSettings(types: [.alert, .sound, .badge],
+//                categories: notificationsPermissionSet)
+//            )
+//        case .unauthorized:
+//            showDeniedAlert(.notifications)
+//        case .disabled:
+//            showDisabledAlert(.notifications)
+//        case .authorized:
+//            detectAndCallback()
+//        }
+//    }
     
     // MARK: Microphone
     
@@ -1021,6 +1037,67 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     }
     
     /**
+     Shows the modal viewcontroller for requesting access to the configured permissions and sets up the closures on it.
+     
+     - parameter authChange: Called when a status is detected on any of the permissions.
+     - parameter cancelled:  Called when the user taps the Close button.
+     */
+    public func show(inView: UIView, buttonBuilder: ButtonBuilder? = nil, _ authChange: authClosureType? = nil, cancelled: cancelClosureType? = nil) {
+        assert(!configuredPermissions.isEmpty, "Please add at least one permission")
+        
+        onAuthChange = authChange
+        onCancel = cancelled
+        
+        DispatchQueue.main.async {
+            while self.waitingForBluetooth || self.waitingForMotion { }
+            // call other methods that need to wait before show
+            // no missing required perms? callback and do nothing
+            self.requiredAuthorized({ areAuthorized in
+                if areAuthorized {
+                    self.getResultsForConfig({ results in
+                        
+                        self.onAuthChange?(true, results)
+                    })
+                } else {
+                    self.showInView(inView, buttonBuilder: buttonBuilder)
+                }
+            })
+        }
+    }
+    
+    /**
+     shows permission UI in provided view.
+     */
+    fileprivate func showInView(_ contentView: UIView, buttonBuilder: ButtonBuilder? = nil) {
+        for button in permissionButtons {
+            button.removeFromSuperview()
+        }
+        permissionButtons = []
+        
+        for label in permissionLabels {
+            label.removeFromSuperview()
+        }
+        permissionLabels = []
+        
+        // create the buttons
+        for permission in configuredPermissions {
+            let button: UIButton
+            if let builder = buttonBuilder {
+                button = builder.build()
+                setButtonText(button, type: permission.type)
+            }
+            else {
+                button = permissionStyledButton(permission.type)
+                setButtonText(button, type: permission.type)
+            }
+            permissionButtons.append(button)
+            contentView.addSubview(button)
+        }
+        
+        layoutContentView(contentView, isPopupLayout: false)
+    }
+    
+    /**
     Creates the modal viewcontroller and shows it.
     */
     fileprivate func showAlert() {
@@ -1047,6 +1124,7 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         // create the buttons
         for permission in configuredPermissions {
             let button = permissionStyledButton(permission.type)
+            setButtonText(button, type: permission.type)
             permissionButtons.append(button)
             contentView.addSubview(button)
 
@@ -1293,4 +1371,12 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         
         completionBlock(results)
     }
+}
+
+private protocol OptionalP {
+    var isNil: Bool { get }
+}
+
+extension Optional: OptionalP {
+    var isNil: Bool { return self == nil }
 }

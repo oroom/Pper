@@ -18,6 +18,7 @@
 		DC484145203C1BBB00C7F7A6 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484140203C1BBB00C7F7A6 /* Structs.swift */; };
 		DC484146203C1BBB00C7F7A6 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484141203C1BBB00C7F7A6 /* Permissions.swift */; };
 		DC484147203C1BBB00C7F7A6 /* PermissionScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484142203C1BBB00C7F7A6 /* PermissionScope.swift */; };
+		DC484149203C1E9300C7F7A6 /* PperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC484148203C1E9300C7F7A6 /* PperProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		DC484140203C1BBB00C7F7A6 /* Structs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		DC484141203C1BBB00C7F7A6 /* Permissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
 		DC484142203C1BBB00C7F7A6 /* PermissionScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionScope.swift; sourceTree = "<group>"; };
+		DC484148203C1E9300C7F7A6 /* PperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PperProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				DC484141203C1BBB00C7F7A6 /* Permissions.swift */,
 				DC484142203C1BBB00C7F7A6 /* PermissionScope.swift */,
 				DC484140203C1BBB00C7F7A6 /* Structs.swift */,
+				DC484148203C1E9300C7F7A6 /* PperProtocol.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				DC484145203C1BBB00C7F7A6 /* Structs.swift in Sources */,
 				DC484144203C1BBB00C7F7A6 /* PermissionConstants.swift in Sources */,
 				DC484146203C1BBB00C7F7A6 /* Permissions.swift in Sources */,
+				DC484149203C1E9300C7F7A6 /* PperProtocol.swift in Sources */,
 				DC48413B203C168700C7F7A6 /* Location.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

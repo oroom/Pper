@@ -1,7 +1,7 @@
 import Foundation
 
 /// Permissions currently supportes by PermissionScope
-@objc public enum PermissionType: Int, CustomStringConvertible {
+public enum PermissionType: Int, CustomStringConvertible {
     case contacts, locationAlways, locationInUse, notifications, microphone, camera, photos, reminders, events, bluetooth, motion
     
     public var prettyDescription: String {

@@ -12,7 +12,7 @@ import Foundation
 /**
 *  Protocol for permission configurations.
 */
-@objc public protocol Permission {
+public protocol Permission {
     /// Permission type
     var type: PermissionType { get }
 }
