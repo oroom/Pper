@@ -14,8 +14,8 @@ public typealias authClosureType      = (_ finished: Bool, _ results: [Permissio
 public typealias cancelClosureType    = (_ results: [PermissionResult]) -> Void
 typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
 
-public protocol ButtonBuilder {
-    func build() -> UIButton
+public protocol ItemBuilder {
+    func build() -> PperItem
 }
 
 @objc public class PermissionScope: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate, CBPeripheralManagerDelegate {
@@ -80,7 +80,7 @@ public protocol ButtonBuilder {
     
     /// Permissions configured using `addPermission(:)`
     public var configuredPermissions: [Permission] = []
-    var permissionButtons: [UIButton]       = []
+    var permissionButtons: [PperItem]       = []
     var permissionLabels: [UILabel]         = []
 	
 	// Useful for direct use of the request* methods
@@ -269,13 +269,13 @@ public protocol ButtonBuilder {
                                     let prettyDescription = type.prettyDescription
                                     if currentStatus == .authorized {
                                         button.setStatus(.authorized)
-                                        button.setTitle("Allowed \(prettyDescription)".localized.uppercased(), for: .normal)
+                                        button.setText("Allowed \(prettyDescription)".localized.uppercased())
                                     } else if currentStatus == .unauthorized {
                                         button.setStatus(.unauthorized)
-                                        button.setTitle("Denied \(prettyDescription)".localized.uppercased(), for: .normal)
+                                        button.setText("Denied \(prettyDescription)".localized.uppercased())
                                     } else if currentStatus == .disabled {
                                         //                setButtonDisabledStyle(button)
-                                        button.setTitle("\(prettyDescription) Disabled".localized.uppercased(), for: .normal)
+                                        button.setText("\(prettyDescription) Disabled".localized.uppercased())
                                     }
                                     
                                     if index < self.permissionLabels.count {
@@ -320,8 +320,8 @@ public protocol ButtonBuilder {
     
     - returns: UIButton instance with a custom style.
     */
-    func permissionStyledButton(_ type: PermissionType) -> UIButton {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 220, height: 40))
+    func permissionStyledButton(_ type: PermissionType) -> PperItem {
+        let button = PperButton(frame: CGRect(x: 0, y: 0, width: 220, height: 40))
         button.setTitleColor(permissionButtonTextColor, for: .normal)
         button.titleLabel?.font = buttonFont
 
@@ -332,18 +332,18 @@ public protocol ButtonBuilder {
         return button
     }
     
-    private func setButtonText(_ button: UIButton, type: PermissionType) {
+    private func setItemText(_ item: PperItem, type: PermissionType) {
         // this is a bit of a mess, eh?
         switch type {
         case .locationAlways, .locationInUse:
-            button.setTitle("Enable \(type.prettyDescription)".localized.uppercased(), for: .normal)
+            item.setText("Enable \(type.prettyDescription)".localized.uppercased())
         default:
-            button.setTitle("Allow \(type)".localized.uppercased(), for: .normal)
+            item.setText("Allow \(type)".localized.uppercased())
         }
         
-        button.addTarget(self, action: Selector("request\(type)"), for: .touchUpInside)
+        item.addTarget(self, action: Selector("request\(type)"), for: .touchUpInside)
         
-        button.accessibilityIdentifier = "permissionscope.button.\(type)".lowercased()
+        item.accessibilityIdentifier = "permissionscope.button.\(type)".lowercased()
     }
 
     /**
@@ -1016,7 +1016,7 @@ public protocol ButtonBuilder {
      - parameter authChange: Called when a status is detected on any of the permissions.
      - parameter cancelled:  Called when the user taps the Close button.
      */
-    public func show(inView: UIView, buttonBuilder: ButtonBuilder? = nil, _ authChange: authClosureType? = nil, cancelled: cancelClosureType? = nil) {
+    public func show(inView: UIView, itemBuilder: ItemBuilder? = nil, _ authChange: authClosureType? = nil, cancelled: cancelClosureType? = nil) {
         assert(!configuredPermissions.isEmpty, "Please add at least one permission")
         
         onAuthChange = authChange
@@ -1033,7 +1033,7 @@ public protocol ButtonBuilder {
                         self.onAuthChange?(true, results)
                     })
                 } else {
-                    self.showInView(inView, buttonBuilder: buttonBuilder)
+                    self.showInView(inView, itemBuilder: itemBuilder)
                 }
             })
         }
@@ -1042,7 +1042,7 @@ public protocol ButtonBuilder {
     /**
      shows permission UI in provided view.
      */
-    fileprivate func showInView(_ contentView: UIView, buttonBuilder: ButtonBuilder? = nil) {
+    fileprivate func showInView(_ contentView: UIView, itemBuilder: ItemBuilder? = nil) {
         for button in permissionButtons {
             button.removeFromSuperview()
         }
@@ -1055,14 +1055,14 @@ public protocol ButtonBuilder {
         
         // create the buttons
         for permission in configuredPermissions {
-            let button: UIButton
-            if let builder = buttonBuilder {
+            let button: PperItem
+            if let builder = itemBuilder {
                 button = builder.build()
-                setButtonText(button, type: permission.type)
+                setItemText(button, type: permission.type)
             }
             else {
                 button = permissionStyledButton(permission.type)
-                setButtonText(button, type: permission.type)
+                setItemText(button, type: permission.type)
             }
             permissionButtons.append(button)
             contentView.addSubview(button)
@@ -1098,7 +1098,7 @@ public protocol ButtonBuilder {
         // create the buttons
         for permission in configuredPermissions {
             let button = permissionStyledButton(permission.type)
-            setButtonText(button, type: permission.type)
+            setItemText(button, type: permission.type)
             permissionButtons.append(button)
             contentView.addSubview(button)
 

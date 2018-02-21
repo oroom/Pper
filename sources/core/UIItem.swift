@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+public typealias PperItem = (UIView & UIItem)
+
 public protocol UIItem: class {
     /// Color used for permission buttons with authorized status
     var authorizedButtonColor: UIColor { get }
@@ -19,7 +21,11 @@ public protocol UIItem: class {
     func setText(_ text: String)
 }
 
-extension UIButton: UIItem {
+class PperButton: UIButton {
+    
+}
+
+extension PperButton: UIItem {
     public var authorizedButtonColor: UIColor { return UIColor(red: 0, green: 0.47, blue: 1, alpha: 1) }
     public var unauthorizedButtonColor: UIColor? { return nil }
     
