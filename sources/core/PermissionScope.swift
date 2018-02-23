@@ -193,7 +193,7 @@ public protocol ItemBuilder {
         
         contentView.addSubview(closeButton)
         
-        _ = self.statusMotion() //Added to check motion status on load
+//        _ = self.statusMotion() //Added to check motion status on load
     }
     
     /**
@@ -306,11 +306,11 @@ public protocol ItemBuilder {
             permissionMessages[permission.type] = message
         }
         
-        if permission.type == .bluetooth && askedBluetooth {
-            triggerBluetoothStatusUpdate()
-        } else if permission.type == .motion && askedMotion {
-            triggerMotionStatusUpdate()
-        }
+//        if permission.type == .bluetooth && askedBluetooth {
+//            triggerBluetoothStatusUpdate()
+//        } else if permission.type == .motion && askedMotion {
+//            triggerMotionStatusUpdate()
+//        }
     }
     
     /**
@@ -803,35 +803,35 @@ public protocol ItemBuilder {
      
      - returns: Permission status for the requested type.
      */
-    public func statusEvents() -> PermissionStatus {
-        let status = EKEventStore.authorizationStatus(for: .event)
-        switch status {
-        case .authorized:
-            return .authorized
-        case .restricted, .denied:
-            return .unauthorized
-        case .notDetermined:
-            return .unknown
-        }
-    }
+//    public func statusEvents() -> PermissionStatus {
+//        let status = EKEventStore.authorizationStatus(for: .event)
+//        switch status {
+//        case .authorized:
+//            return .authorized
+//        case .restricted, .denied:
+//            return .unauthorized
+//        case .notDetermined:
+//            return .unknown
+//        }
+//    }
     
     /**
      Requests access to Events, if necessary.
      */
-    @objc public func requestEvents() {
-        let status = statusEvents()
-        switch status {
-        case .unknown:
-            EKEventStore().requestAccess(to: .event,
-                                         completion: { granted, error in
-                                            self.detectAndCallback()
-            })
-        case .unauthorized:
-            self.showDeniedAlert(.events)
-        default:
-            break
-        }
-    }
+//    @objc public func requestEvents() {
+//        let status = statusEvents()
+//        switch status {
+//        case .unknown:
+//            EKEventStore().requestAccess(to: .event,
+//                                         completion: { granted, error in
+//                                            self.detectAndCallback()
+//            })
+//        case .unauthorized:
+//            self.showDeniedAlert(.events)
+//        default:
+//            break
+//        }
+//    }
     
     // MARK: Bluetooth
     
@@ -994,7 +994,7 @@ public protocol ItemBuilder {
         onCancel = cancelled
         
         DispatchQueue.main.async {
-            while self.waitingForBluetooth || self.waitingForMotion { }
+//            while self.waitingForBluetooth || self.waitingForMotion { }
             // call other methods that need to wait before show
             // no missing required perms? callback and do nothing
             self.requiredAuthorized({ areAuthorized in
@@ -1023,7 +1023,7 @@ public protocol ItemBuilder {
         onCancel = cancelled
         
         DispatchQueue.main.async {
-            while self.waitingForBluetooth || self.waitingForMotion { }
+//            while self.waitingForBluetooth || self.waitingForMotion { }
             // call other methods that need to wait before show
             // no missing required perms? callback and do nothing
             self.requiredAuthorized({ areAuthorized in
@@ -1279,23 +1279,31 @@ public protocol ItemBuilder {
         case .locationInUse:
             permissionStatus = statusLocationInUse()
         case .contacts:
-            permissionStatus = statusContacts()
+            permissionStatus = .unknown
+            //permissionStatus = statusContacts()
         case .notifications:
-            permissionStatus = statusNotifications()
+            permissionStatus = .unknown
+            // = statusNotifications()
         case .microphone:
-            permissionStatus = statusMicrophone()
+            permissionStatus = .unknown
+            //permissionStatus = statusMicrophone()
         case .camera:
             permissionStatus = statusCamera()
         case .photos:
-            permissionStatus = statusPhotos()
+            permissionStatus = .unknown
+            //permissionStatus = statusPhotos()
         case .reminders:
-            permissionStatus = statusReminders()
+            permissionStatus = .unknown
+            //permissionStatus = statusReminders()
         case .events:
-            permissionStatus = statusEvents()
+            permissionStatus = .unknown
+            //permissionStatus = statusEvents()
         case .bluetooth:
-            permissionStatus = statusBluetooth()
+            permissionStatus = .unknown
+            //permissionStatus = statusBluetooth()
         case .motion:
-            permissionStatus = statusMotion()
+            permissionStatus = .unknown
+            //permissionStatus = statusMotion()
         }
         
         // Perform completion
