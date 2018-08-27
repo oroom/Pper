@@ -259,6 +259,7 @@ public protocol ItemBuilder {
         let baseOffset: CGFloat = isPopupLayout ? 95.0 : 16.0
         var index = 0
         for button in permissionButtons {
+            button.frame.size.width = contentView.bounds.width - (contentView.layoutMargins.left + contentView.layoutMargins.right)
             button.frame.origin.x = (contentView.bounds.width - button.bounds.width) / 2
             button.frame.origin.y = verticalOffset + CGFloat(index) * (button.frame.height + baseOffset)
             
