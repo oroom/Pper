@@ -270,13 +270,13 @@ public protocol ItemBuilder {
                                     let prettyDescription = type.prettyDescription
                                     if currentStatus == .authorized {
                                         button.setStatus(.authorized)
-                                        button.setText("Allowed \(prettyDescription)".localized.uppercased())
+                                        button.setText("Allowed \(prettyDescription)".localized)
                                     } else if currentStatus == .unauthorized {
                                         button.setStatus(.unauthorized)
-                                        button.setText("Denied \(prettyDescription)".localized.uppercased())
+                                        button.setText("Denied \(prettyDescription)".localized)
                                     } else if currentStatus == .disabled {
                                         //                setButtonDisabledStyle(button)
-                                        button.setText("\(prettyDescription) Disabled".localized.uppercased())
+                                        button.setText("\(prettyDescription) Disabled".localized)
                                     }
                                     
                                     if index < self.permissionLabels.count {
@@ -337,9 +337,9 @@ public protocol ItemBuilder {
         // this is a bit of a mess, eh?
         switch type {
         case .locationAlways, .locationInUse:
-            item.setText("Enable \(type.prettyDescription)".localized.uppercased())
+            item.setText("Enable \(type.prettyDescription)".localized)
         default:
-            item.setText("Allow \(type)".localized.uppercased())
+            item.setText("Allow \(type)".localized)
         }
         
         item.addTarget(self, action: Selector("request\(type)"), for: .touchUpInside)
