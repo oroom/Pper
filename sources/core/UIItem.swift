@@ -16,7 +16,7 @@ public protocol UIItem: class {
     var authorizedButtonColor: UIColor { get }
     /// Color used for permission buttons with unauthorized status. By default, inverse of `authorizedButtonColor`.
     var unauthorizedButtonColor: UIColor? { get }
-    func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControlEvents)
+    func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event)
     func setStatus(_ status: PermissionStatus)
     func setText(_ text: String)
 }

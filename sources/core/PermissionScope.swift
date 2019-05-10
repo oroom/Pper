@@ -150,7 +150,7 @@ public protocol ItemBuilder {
         
         // Set up main view
         view.frame = UIScreen.main.bounds
-        view.autoresizingMask = [UIViewAutoresizing.flexibleHeight, UIViewAutoresizing.flexibleWidth]
+        view.autoresizingMask = [UIView.AutoresizingMask.flexibleHeight, UIView.AutoresizingMask.flexibleWidth]
         view.backgroundColor = UIColor(red:0, green:0, blue:0, alpha:0.7)
         view.addSubview(baseView)
         // Base View
@@ -393,6 +393,8 @@ public protocol ItemBuilder {
             }
         case .notDetermined:
             return .unknown
+        @unknown default:
+            return .unknown
         }
     }
     
@@ -446,6 +448,8 @@ public protocol ItemBuilder {
         case .restricted, .denied:
             return .unauthorized
         case .notDetermined:
+            return .unknown
+        @unknown default:
             return .unknown
         }
     }
@@ -698,6 +702,8 @@ public protocol ItemBuilder {
         case .restricted, .denied:
             return .unauthorized
         case .notDetermined:
+            return .unknown
+        @unknown default:
             return .unknown
         }
     }
@@ -1205,9 +1211,9 @@ public protocol ItemBuilder {
         alert.addAction(UIAlertAction(title: "Show me".localized,
                                       style: .default,
                                       handler: { action in
-                                        NotificationCenter.default.addObserver(self, selector: #selector(self.appForegroundedAfterSettings), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+                                        NotificationCenter.default.addObserver(self, selector: #selector(self.appForegroundedAfterSettings), name: UIApplication.didBecomeActiveNotification, object: nil)
                                         
-                                        let settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+                                        let settingsUrl = URL(string: UIApplication.openSettingsURLString)
                                         UIApplication.shared.openURL(settingsUrl!)
         }))
         
@@ -1239,9 +1245,9 @@ public protocol ItemBuilder {
         alert.addAction(UIAlertAction(title: "Show me".localized,
                                       style: .default,
                                       handler: { action in
-                                        NotificationCenter.default.addObserver(self, selector: #selector(self.appForegroundedAfterSettings), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+                                        NotificationCenter.default.addObserver(self, selector: #selector(self.appForegroundedAfterSettings), name: UIApplication.didBecomeActiveNotification, object: nil)
                                         
-                                        let settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+                                        let settingsUrl = URL(string: UIApplication.openSettingsURLString)
                                         UIApplication.shared.openURL(settingsUrl!)
         }))
         
@@ -1260,7 +1266,9 @@ public protocol ItemBuilder {
      to recheck all the permissions and update the UI.
      */
     @objc func appForegroundedAfterSettings() {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didBecomeActiveNotification, object: nil)
         
         detectAndCallback()
     }
